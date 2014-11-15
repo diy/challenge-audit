@@ -1,6 +1,6 @@
 # challenge-audit
 
-Audit challenges for crispiness and other obscure factors.
+Audit DIY challenges for crispiness and other obscure factors.
 
 This was built quickly during our first `Hack-a-Thing` day as a first step
 towards authoring better skills and challenges. It's pretty weak right now, but
