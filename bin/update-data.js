@@ -14,7 +14,17 @@ function query (name, fields, callback) {
     );
 
     return db.query(query);
-};
+}
+
+function activeQuery (name, fields, callback) {
+    var query = util.format(
+        'SELECT %s FROM %s WHERE active = 1',
+        fields.join(','),
+        name
+    );
+
+    return db.query(query);
+}
 
 var challenges = [
     'id', 'title', 'short', 'description', 'difficulty', 'skill_id'
@@ -33,7 +43,7 @@ db.connect();
 async.auto({
     skills: function (callback) {
         var skillsLookup = {};
-        var skillsQuery = query('skills', skills);
+        var skillsQuery = activeQuery('skills', skills);
         skillsQuery.on('result', function (row) {
             skillsDb.put(row.id + '', row);
         });
@@ -42,8 +52,15 @@ async.auto({
     },
 
     challenges: function (callback) {
-        var challengesQuery = query('challenges', challenges);
+        var challengesQuery = activeQuery('challenges', challenges);
         challengesQuery.on('result', function (row) {
+            var noGood = (
+                !row.title ||
+                !row.description
+            );
+
+            if (noGood) return;
+
             challengesDb.put(row.id + '', row);
         });
 
